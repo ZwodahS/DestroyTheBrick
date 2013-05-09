@@ -1,7 +1,6 @@
 #include "Game.hpp"
 
-#include "screens/Screen.hpp"
-
+#include "g_screens.hpp"
 #include <SFML/Graphics.hpp>
 
 
@@ -16,6 +15,7 @@ Game::Game()
     loadAssets();
     _window = new sf::RenderWindow(sf::VideoMode(_width,_height),_title);
 
+    _mouse = new zf::Mouse();
 }
 
 Game::~Game()
@@ -28,15 +28,14 @@ void Game::run()
     sf::Clock clock; // set up the clock for delta
 
     bool quit = false;
-
+    GameScreen* screen = new GameScreen(this);
+    _currentScreen = screen;
     while(!quit && _window->isOpen())
     {
         // update clock 
         sf::Time delta = clock.restart();
         // update mouse.
         _mouse->update(delta);
-        
-
         // check for events, especially mousewheel
         sf::Event event;
         while(_window->pollEvent(event))
@@ -63,7 +62,10 @@ void Game::run()
 
 void Game::update(sf::Time delta)
 {
-
+    if(_currentScreen != 0)
+    {
+        _currentScreen->update(_window,delta);
+    }
 }
 
 void Game::draw(sf::Time delta)

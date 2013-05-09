@@ -2,6 +2,7 @@ vpath %.cpp z_framework/zf_common/
 vpath %.cpp z_framework/zf_sfml/
 vpath %.cpp game/
 vpath %.cpp game/screens/
+vpath %.cpp game/boards/
 vpath %.o obj/
 
 BIN=destroy
