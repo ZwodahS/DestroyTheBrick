@@ -73,3 +73,7 @@ bool Board::putBrickInto(int row, int col , Brick* brick)
     }
     return false;
 }
+
+void Board::reachTarget(Brick* brick, sf::Vector2f moveVector)
+{
+}

@@ -1,6 +1,7 @@
 #ifndef _GAME_SCREENS_GAMESCREEN_H_
 #define _GAME_SCREENS_GAMESCREEN_H_
 #include "Screen.hpp"
+#include "../GameData.hpp"
 #include <SFML/Graphics.hpp>
 
 class Board;
@@ -15,7 +16,7 @@ class GameScreen : public Screen
 
 
     protected:
-        Board* _board;
+        GameData _data;
 };
 
 #endif

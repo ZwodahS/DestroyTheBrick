@@ -11,7 +11,7 @@ class Board
         bool inRange(int row , int col);
         Brick* getBrickAt(int row, int col);
         bool putBrickInto(int row, int col, Brick* brick);
-
+        void reachTarget(Brick* brick, sf::Vector2f moveVector);
         void update(sf::RenderWindow* window, sf::Time delta);
         void draw(sf::RenderWindow* window, sf::Time delta);
     private:

@@ -42,7 +42,8 @@ class Brick
         void draw(sf::RenderWindow* window, sf::Time delta);
     private:
         sf::Vector2f _position;
-
+        
+        sf::Vector2f _moveVector;
         Board* _board;
         Game* _game;
         brick::BrickType _type;

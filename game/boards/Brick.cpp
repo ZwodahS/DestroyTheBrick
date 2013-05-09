@@ -2,6 +2,10 @@
 #include "../consts.hpp"
 #include "Board.hpp"
 #include "../Game.hpp"
+
+#define MOVESPEED 100
+
+
 Brick::Brick(Game* game,Board* board, brick::BrickType type)
 {
     this->_board = board;
@@ -29,12 +33,12 @@ sf::Vector2f Brick::getTargetPosition()
 
 bool Brick::isMoving()
 {
-    getCurrentPosition() != getTargetPosition();
+    return _moveVector != sf::Vector2f(0,0);
 }
 
 bool Brick::isInPosition()
 {
-    return _currentLocation == _targetLocation;
+    return _position == getTargetPosition();
 }
 
 void Brick::setLocation(int row, int col)
@@ -47,14 +51,87 @@ void Brick::setLocation(int row, int col)
 void Brick::moveToLocation(int row, int col)
 {
     this->_targetLocation = Grid(row,col);
+    if(_currentLocation.row < row)
+    {
+        this->_moveVector.y = 1;
+    }
+    else if(_currentLocation.row > row)
+    {
+        this->_moveVector.y = -1;
+    }
+    else
+    {
+        this->_moveVector.y = 0;
+    }
+    if(_currentLocation.col < col)
+    {
+        this->_moveVector.x = 1;
+    }
+    else if(_currentLocation.col > col)
+    {
+        this->_moveVector.x = -1;
+    }
+    else
+    {
+        this->_moveVector.x = 0;
+    }
 }
 
 void Brick::update(sf::RenderWindow* window, sf::Time delta)
 {
+    if(!isMoving())
+    {
+        return;
+    }
+    float diffx = _moveVector.x * delta.asSeconds() * MOVESPEED;
+    float diffy = _moveVector.y * delta.asSeconds() * MOVESPEED;
+    if(isMoving())
+    {
+        _position += sf::Vector2f(diffx,diffy);
+    }
+    // check for over flow
+    sf::Vector2f targetPosition = getTargetPosition();
+    if(_moveVector.x > 0)
+    {
+        if(_position.x > targetPosition.x)
+        {
+            _position.x = targetPosition.x;
+        }
+    }
+    else if (_moveVector.x < 0)
+    {
+        if(_position.x < targetPosition.x)
+        {
+            _position.x = targetPosition.x;
+        }
+    }
+
+    if(_moveVector.y > 0)
+    {
+        if(_position.y > targetPosition.y)
+        {
+            _position.y = targetPosition.y;
+        }
+    }
+    else if(_moveVector.y < 0 )
+    {
+        if(_position.y < targetPosition.y)
+        {
+            _position.y = targetPosition.y;
+        }
+    }
+    
+    if(isInPosition())
+    {
+        sf::Vector2f oldMoveVector = _moveVector; // do this because board might or might not set the move Vector.
+        _moveVector = sf::Vector2f(0,0);
+        _board->reachTarget(this,oldMoveVector);
+    }
 }
 
 void Brick::draw(sf::RenderWindow* window, sf::Time delta)
 {
+    _brickSprite.setPosition(_position);
     window->draw(_brickSprite);
 }
 
