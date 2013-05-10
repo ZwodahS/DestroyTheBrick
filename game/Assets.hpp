@@ -10,10 +10,19 @@ struct BrickAssets
     TextureRegion grid;
 };
 
+struct ArrowAssets
+{
+    TextureRegion up;
+    TextureRegion down;
+    TextureRegion left;
+    TextureRegion right;
+};
+
 struct Assets
 {
     sf::Font scoreFont;
     BrickAssets bricks;
+    ArrowAssets arrows;
 
 };
 #endif

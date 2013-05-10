@@ -21,4 +21,23 @@ void Game::loadAssets()
     _assets.bricks.brick = TextureRegion(region.texture,sf::IntRect(srcClip.left, srcClip.top,32,32));
     _assets.bricks.grid = TextureRegion(region.texture,sf::IntRect(srcClip.left+32,srcClip.top,32,32));
 
+
+    group.create(64,64,sf::Color::Black);
+    image.loadFromFile("assets/img/arrows/up.png");
+    group.copy(image,0,0,sf::IntRect(0,0,0,0),true);
+    image.loadFromFile("assets/img/arrows/down.png");
+    group.copy(image,32,0,sf::IntRect(0,0,0,0),true);
+    image.loadFromFile("assets/img/arrows/left.png");
+    group.copy(image,0,32,sf::IntRect(0,0,0,0),true);
+    image.loadFromFile("assets/img/arrows/right.png");
+    group.copy(image,32,32,sf::IntRect(0,0,0,0),true);
+
+
+    region = _assets.bricks.spriteSheet.createRegion(group);
+    srcClip = region.srcClip;
+
+    _assets.arrows.up = TextureRegion(region.texture, sf::IntRect(srcClip.left, srcClip.top, 32, 32));
+    _assets.arrows.down = TextureRegion(region.texture, sf::IntRect(srcClip.left+32,srcClip.top, 32, 32));
+    _assets.arrows.left = TextureRegion(region.texture, sf::IntRect(srcClip.left, srcClip.top+32, 32, 32));
+    _assets.arrows.right = TextureRegion(region.texture, sf::IntRect(srcClip.left+32, srcClip.top+32, 32, 32));
 }

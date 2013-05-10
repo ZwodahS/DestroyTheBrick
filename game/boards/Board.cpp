@@ -1,17 +1,17 @@
 #include "Board.hpp"
 
 #include "../Game.hpp"
+#include "../consts.hpp"
 #include "Brick.hpp"
 
-#define BOARD_SIZE 13
 Board::Board(Game* game)
 {
     this->_game = game;
 
-    for(int r = 0 ; r < BOARD_SIZE ; r++)
+    for(int r = 0 ; r < gameconsts::BOARD_SIZE ; r++)
     {
         _bricks.push_back(std::vector<Brick*>(0));
-        for(int c = 0 ; c < BOARD_SIZE ; c++)
+        for(int c = 0 ; c < gameconsts::BOARD_SIZE ; c++)
         {
             _bricks[r].push_back(0);
         }

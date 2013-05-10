@@ -9,8 +9,8 @@
 
 Game::Game()
 {
-    _width = 640;
-    _height = 640;
+    _width = 320;
+    _height = 320;
     _title = "Destroy the Brick";
     loadAssets();
     _window = new sf::RenderWindow(sf::VideoMode(_width,_height),_title);
