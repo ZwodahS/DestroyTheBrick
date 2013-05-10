@@ -130,7 +130,7 @@ void Board::update(sf::RenderWindow* window, sf::Time delta)
             }
             for(int i = _movingBricks.size() ; i < mBricks.size() ; i++)
             {
-                addMovingBricks(mBricks[i],mBricks);
+                addMovingBricks(mBricks[i],mBricks,_currentMovingDirection);
             }
             for(int i = 0 ; i < mBricks.size() ; i++)
             {
@@ -145,34 +145,58 @@ void Board::update(sf::RenderWindow* window, sf::Time delta)
     }
 }
 
-void Board::addMovingBricks(Brick* brick, std::vector<Brick*> &movingBricks)
+void Board::addMovingBricks(Brick* brick, std::vector<Brick*> &movingBricks, Grid moveDirection)
 {
     // for now , i will just move all "connected block"
     Grid location = brick->_currentLocation;
-    Brick* north = getBrickAt(location + Grid(0,-1));
-    Brick* south = getBrickAt(location + Grid(0,1));
-    Brick* east = getBrickAt(location + Grid(1,0));
-    Brick* west = getBrickAt(location + Grid(-1,0));
+    Brick* north = getBrickAt(location + Grid(-1,0));
+    Brick* south = getBrickAt(location + Grid(1,0));
+    Brick* east = getBrickAt(location + Grid(0,1));
+    Brick* west = getBrickAt(location + Grid(0,-1));
     
-    if(north != 0 && !north->tmp_moves)
+    if(north != 0 ) // not sure why some times short circuit works sometime it doesn't.
     {
-        north->tmp_moves = true;    
-        movingBricks.push_back(north);
+        if(!north->tmp_moves)
+        {
+            if(brick->getType() == north->getType() || moveDirection == Grid(-1,0))
+            {
+                north->tmp_moves = true;    
+                movingBricks.push_back(north);
+            }
+        }
     }
-    if(south != 0 && !south->tmp_moves)
+    if(south != 0 )
     {
-        south->tmp_moves = true;    
-        movingBricks.push_back(south);
+        if(!south->tmp_moves)
+        {
+            if(brick->getType() == south->getType() || moveDirection == Grid(1,0))
+            {
+                south->tmp_moves = true;    
+                movingBricks.push_back(south);
+            }
+        }
     }
-    if(east != 0 && !east->tmp_moves)
+    if(east != 0)
     {
-        east->tmp_moves = true;    
-        movingBricks.push_back(east);
+        if(!east->tmp_moves)
+        {
+            if(brick->getType() == east->getType() || moveDirection == Grid(0,1))
+            {
+                east->tmp_moves = true;    
+                movingBricks.push_back(east);
+            }
+        }
     }
-    if(west != 0 && !west->tmp_moves)
+    if(west != 0 )
     {
-        west->tmp_moves = true;    
-        movingBricks.push_back(west);
+        if(!west->tmp_moves)
+        {
+            if(brick->getType() == west->getType() || moveDirection == Grid(0,-1))
+            {
+                west->tmp_moves = true;    
+                movingBricks.push_back(west);
+            }
+        }
     }
 
 }

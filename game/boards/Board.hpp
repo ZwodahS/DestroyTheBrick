@@ -28,6 +28,6 @@ class Board
         std::vector<std::vector<Brick*> > _bricksActualPosition;
         std::vector<Brick*> _movingBricks;
         int getKnockValue();
-        void addMovingBricks(Brick* brick, std::vector<Brick*> &movingBricks);
+        void addMovingBricks(Brick* brick, std::vector<Brick*> &movingBricks,Grid moveDirection);
 };
 #endif
