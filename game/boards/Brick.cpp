@@ -6,6 +6,35 @@
 #define MOVESPEED 100
 
 
+Brick::Brick(Game* game,Board* board)
+{
+    this->_board = board;
+    this->_currentLocation = Grid(0,0);
+    this->_targetLocation = Grid(0,0);
+    this->_position = sf::Vector2f(0,0);
+    this->_game = game;
+    this->_brickSprite = _game->_assets.bricks.brick.createSprite();
+    int r = rand() % 4;
+    if(r == 0)
+    {
+        setType(brick::RED);
+    }    
+    else if(r == 1)
+    {
+        setType(brick::GREEN);
+    }
+    else if(r == 2)
+    {
+        setType(brick::BLUE);
+    }
+    else 
+    {
+        setType(brick::YELLOW);
+    }
+}
+
+
+
 Brick::Brick(Game* game,Board* board, brick::BrickType type)
 {
     this->_board = board;
@@ -51,6 +80,7 @@ void Brick::setLocation(int row, int col)
 void Brick::moveToLocation(int row, int col)
 {
     this->_targetLocation = Grid(row,col);
+    
     if(_currentLocation.row < row)
     {
         this->_moveVector.y = 1;
@@ -75,6 +105,11 @@ void Brick::moveToLocation(int row, int col)
     {
         this->_moveVector.x = 0;
     }
+}
+
+void Brick::moveBy(int row, int col)
+{
+    this->moveToLocation(_currentLocation.row + row , _currentLocation.col + col);
 }
 
 void Brick::update(sf::RenderWindow* window, sf::Time delta)
@@ -123,9 +158,7 @@ void Brick::update(sf::RenderWindow* window, sf::Time delta)
     
     if(isInPosition())
     {
-        sf::Vector2f oldMoveVector = _moveVector; // do this because board might or might not set the move Vector.
-        _moveVector = sf::Vector2f(0,0);
-        _board->reachTarget(this,oldMoveVector);
+        _moveVector = sf::Vector2f(0,0);    
     }
 }
 
@@ -162,3 +195,4 @@ void Brick::setType(brick::BrickType type)
 
     }
 }
+

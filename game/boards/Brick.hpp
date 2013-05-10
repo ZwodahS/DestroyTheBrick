@@ -22,6 +22,7 @@ class Game;
 class Brick
 {
     public:
+        Brick(Game* game,Board* board);
         Brick(Game* game,Board* board,brick::BrickType type);
         ~Brick();
 
@@ -36,10 +37,12 @@ class Brick
     
         void setLocation(int row, int col);
         void moveToLocation(int row , int col);
-    
+        void moveBy(int row, int col); 
 
         void update(sf::RenderWindow* window, sf::Time delta);
         void draw(sf::RenderWindow* window, sf::Time delta);
+
+        bool tmp_moves; // a temp variable used when checking
     private:
         sf::Vector2f _position;
         
