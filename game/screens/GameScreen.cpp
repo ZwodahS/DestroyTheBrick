@@ -38,10 +38,9 @@ GameScreen::GameScreen(Game* game)
     sf::Sprite sprite = _game->_assets.bricks.brick.createSprite();
     sprite.setPosition(100,100);
     sprite.setColor(sf::Color(255,255,255,255));
-    _game->_animator->fade(sprite,0,1.0f);
-    _game->_animator->move(sprite,sf::Vector2f(200,200),3.0f);
     
     _game->_animator->composite(sprite,(_game->_animator->composite()->move(sprite.getPosition(),sf::Vector2f(200,0),3.0f)->fade(sprite.getColor().a,0,5.0f)));
+    _game->_animator->composite(sprite,(_game->_animator->composite(true)->move(sprite.getPosition(),sf::Vector2f(200,200),3.0f)->fade(sprite.getColor().a,0,5.0f)));
 }
 
 void GameScreen::draw(sf::RenderWindow* window, sf::Time delta)

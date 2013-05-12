@@ -2,8 +2,15 @@
 #include "AnimationObject.hpp"
 CompositeInstruction::CompositeInstruction()
 {
-    _instructions = std::vector<AnimationInstruction*>(0);
-    _done = false;
+    this->_instructions = std::vector<AnimationInstruction*>(0);
+    this->_done = false;
+    this->_ordered = false;
+}
+CompositeInstruction::CompositeInstruction(bool ordered)
+{
+    this->_instructions = std::vector<AnimationInstruction*>(0);
+    this->_done = false;
+    this->_ordered = ordered;
 }
 
 CompositeInstruction::~CompositeInstruction()
@@ -14,28 +21,48 @@ CompositeInstruction::~CompositeInstruction()
     }
 }
 
-void CompositeInstruction::addInstruction(FadeInstruction fi)
+CompositeInstruction* CompositeInstruction::addInstruction(FadeInstruction fi)
 {
     FadeInstruction* f = new FadeInstruction(fi);
     this->_instructions.push_back(f);
+    return this;
 }
 
-void CompositeInstruction::addInstruction(MoveInstruction mi)
+CompositeInstruction* CompositeInstruction::addInstruction(MoveInstruction mi)
 {
     MoveInstruction* m = new MoveInstruction(mi);
     this->_instructions.push_back(m);
+    return this;
 }
 
 bool CompositeInstruction::update(sf::RenderWindow* window, sf::Time delta, AnimationObject* object)
 {
     if(!_done)
     {
-        _done = true;
-        for(int i = 0 ; i < _instructions.size() ; i++)
+        if(!_ordered)
         {
-            if(!_instructions[i]->update(window,delta,object))
+            _done = true;
+            for(int i = 0 ; i < _instructions.size() ; i++)
             {
-                _done = false;
+                if(!_instructions[i]->update(window,delta,object))
+                {
+                    _done = false;
+                }
+            }
+        }
+        else
+        {
+            _done = true;
+            for(int i = 0 ; i < _instructions.size() ; i++)
+            {
+                if(!_instructions[i]->isDone(object))
+                {
+                    if(!_instructions[i]->update(window,delta,object) || i != _instructions.size() - 1)
+                    {
+                        _done = false;
+                        break;
+                    }
+                }
             }
         }
     }

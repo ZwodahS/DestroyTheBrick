@@ -8,19 +8,23 @@ class AnimationObject;
 class CompositeInstruction : public AnimationInstruction
 {
     public:
+        // if ordered is true , then the instruction is executed one after another.
+        // if not ordered , the instruction is executed all at the same time.
         CompositeInstruction();
+        CompositeInstruction(bool ordered);
         ~CompositeInstruction();
         bool update(sf::RenderWindow* window, sf::Time delta,AnimationObject* object);
         bool isDone(AnimationObject* object);
         
-        void addInstruction(FadeInstruction fi);
+        CompositeInstruction* addInstruction(FadeInstruction fi);
         CompositeInstruction* fade(int startingAlpha, int endingAlpha, float time); // allow for chaining
 
 
-        void addInstruction(MoveInstruction mi);
+        CompositeInstruction* addInstruction(MoveInstruction mi);
         CompositeInstruction* move(sf::Vector2f source, sf::Vector2f target, float delta);
     private:
         std::vector<AnimationInstruction*> _instructions;
+        bool _ordered;
         bool _done;
 };
 

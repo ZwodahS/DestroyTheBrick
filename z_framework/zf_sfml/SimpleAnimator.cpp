@@ -49,9 +49,9 @@ void SimpleAnimator::move(sf::Sprite sprite, sf::Vector2f target , float time)
     objects.push_back(obj);
 }
 
-CompositeInstruction* SimpleAnimator::composite()
+CompositeInstruction* SimpleAnimator::composite(bool ordered)
 {
-    return new CompositeInstruction();
+    return new CompositeInstruction(ordered);
 }
 
 void SimpleAnimator::composite(sf::Sprite sprite, CompositeInstruction* instruction)
