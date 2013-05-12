@@ -16,11 +16,14 @@ Game::Game()
     _window = new sf::RenderWindow(sf::VideoMode(_width,_height),_title);
 
     _mouse = new zf::Mouse();
+    _animator = new SimpleAnimator();
 }
 
 Game::~Game()
 {
-
+    delete _window;
+    delete _mouse;
+    delete _animator;
 }
 
 void Game::run()
@@ -66,6 +69,7 @@ void Game::update(sf::Time delta)
     {
         _currentScreen->update(_window,delta);
     }
+    _animator->update(_window,delta);
 }
 
 void Game::draw(sf::Time delta)
@@ -75,5 +79,6 @@ void Game::draw(sf::Time delta)
     {
         _currentScreen->draw(_window,delta);   
     }
+    _animator->draw(_window,delta);
     _window->display();
 }

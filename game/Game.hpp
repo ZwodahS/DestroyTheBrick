@@ -3,6 +3,7 @@
 
 #include "Assets.hpp"
 #include "../z_framework/zf_sfml/Mouse.hpp"
+#include "../z_framework/zf_sfml/SimpleAnimator.hpp"
 #include <SFML/Graphics.hpp>
 
 #include <string>
@@ -24,6 +25,8 @@ class Game
         int _height;
         std::string _title;
 
+
+        SimpleAnimator* _animator;
     private:
         void update(sf::Time delta);
         void draw(sf::Time delta);
