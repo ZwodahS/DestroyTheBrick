@@ -451,9 +451,9 @@ void Board::fadeBrick(Brick* brick)
     _bricksActualPosition[brick->_currentLocation.row][brick->_currentLocation.col] = 0;
     std::vector<sf::Sprite> splits = brick->split4();
     _animator->composite ( splits[0] , _animator->composite (  ) ->move ( sf::Vector2f ( -200+(rand() % 200) , -200+(rand() % 200) )  , 2.0f ) ->fade ( 255 , 0 , 2.0f )  ) ;
-    _animator->composite ( splits[1] , _animator->composite (  ) ->move ( sf::Vector2f ( 200+(rand() % 200)  , -200+(rand() % 200) )  , 2.0f ) ->fade ( 255 , 0 , 2.0f )  ) ;
-    _animator->composite ( splits[2] , _animator->composite (  ) ->move ( sf::Vector2f ( -200+(rand() % 200) , 200 +(rand() % 200) )  , 2.0f ) ->fade ( 255 , 0 , 2.0f )  ) ;
-    _animator->composite ( splits[3] , _animator->composite (  ) ->move ( sf::Vector2f ( 200+(rand() % 200)  , 200 +(rand() % 200) )  , 2.0f ) ->fade ( 255 , 0 , 2.0f )  ) ;
+    _animator->composite ( splits[1] , _animator->composite (  ) ->move ( sf::Vector2f ( 200-(rand() % 200)  , -200+(rand() % 200) )  , 2.0f ) ->fade ( 255 , 0 , 2.0f )  ) ;
+    _animator->composite ( splits[2] , _animator->composite (  ) ->move ( sf::Vector2f ( -200+(rand() % 200) , 200 -(rand() % 200) )  , 2.0f ) ->fade ( 255 , 0 , 2.0f )  ) ;
+    _animator->composite ( splits[3] , _animator->composite (  ) ->move ( sf::Vector2f ( 200-(rand() % 200)  , 200 -(rand() % 200) )  , 2.0f ) ->fade ( 255 , 0 , 2.0f )  ) ;
     for(int i = 0 ; i < _bricks.size() ; i++)
     {
         if(_bricks[i] == brick)
