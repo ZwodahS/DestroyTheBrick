@@ -8,14 +8,8 @@
 GameScreen::GameScreen(Game* game)
     :Screen(game)
 {
-    _data.board = new Board(_game,&_data);
 
-    _data.board->putBrickInto(4,4,new Brick(_game,_data.board));
-    _data.board->putBrickInto(4,5,new Brick(_game,_data.board));
-    _data.board->putBrickInto(5,4,new Brick(_game,_data.board));
-    _data.board->putBrickInto(5,5,new Brick(_game,_data.board));
-    _data.nextBrick = new Brick(_game,_data.board);
-
+    newGame();
     for(int row = 1 ; row < gameconsts::BOARD_SIZE - 1 ; row ++)
     {
         for(int col = 1 ; col < gameconsts::BOARD_SIZE -1  ; col ++)
@@ -47,6 +41,14 @@ GameScreen::GameScreen(Game* game)
     _scoreValue->setPosition(400,20);
     _scoreValue->setColor(sf::Color(255,255,255));
 
+    _hammerIn = new sf::Text("Hammer:", _game->_assets.scoreFont,10);
+    _hammerIn->setPosition(330,80);
+    _hammerIn->setColor(sf::Color(255,255,255));
+   
+    _hammerValue = new sf::Text(zf::toString(_data.nextHammerTurn),_game->_assets.scoreFont, 10);
+    _hammerValue->setPosition(420,80);
+    _hammerValue->setColor(sf::Color(255,255,255));
+
     _next = new sf::Text("Next :",_game->_assets.scoreFont,10);
     _next->setPosition(330,120);
     _next->setColor(sf::Color(255,255,255));
@@ -54,13 +56,47 @@ GameScreen::GameScreen(Game* game)
     _hammerSprite = new sf::Sprite(_game->_assets.bricks.hammer.createSprite());
     _hammerSprite->setPosition(400,120);
 
-}
+    _gameoverText1 = new sf::Text("Game over", _game->_assets.scoreFont,36);
+    _gameoverText1->setColor(sf::Color(255,255,255));
+    _gameoverText1->setPosition(50,50);
+    _gameoverText2 = new sf::Text("Score : 0", _game->_assets.scoreFont,24);
+    _gameoverText2->setPosition(150,100);
+    _gameoverText2->setColor(sf::Color(255,255,255));
+    _gameoverText3 = new sf::Text("Click for new game",_game->_assets.scoreFont,12);
+    _gameoverText3->setColor(sf::Color(255,255,255));
+    _gameoverText3->setPosition(125,150);
 
+    _bg = sf::RectangleShape(sf::Vector2f(_game->_width,_game->_height));
+    _bg.setFillColor(sf::Color(30,30,30,200));
+
+}
 GameScreen::~GameScreen()
 {
     delete _next;
     delete _hammerSprite;
+    delete _score;
+    delete _scoreValue;
+    delete _next;
+    delete _hammerIn;
+    delete _hammerValue;
+    delete _hammerSprite;
+    delete _gameoverText1;
+    delete _gameoverText2;
+    delete _gameoverText3;
 }
+
+void GameScreen::newGame()
+{
+    _data = GameData();
+    _data.board = new Board(_game,&_data);
+
+    _data.board->putBrickInto(4,4,new Brick(_game,_data.board));
+    _data.board->putBrickInto(4,5,new Brick(_game,_data.board));
+    _data.board->putBrickInto(5,4,new Brick(_game,_data.board));
+    _data.board->putBrickInto(5,5,new Brick(_game,_data.board));
+    _data.nextBrick = new Brick(_game,_data.board);
+}
+
 void GameScreen::draw(sf::RenderWindow* window, sf::Time delta)
 {
     for(int i = 0 ; i < _arrows.size() ; i++)
@@ -77,11 +113,21 @@ void GameScreen::draw(sf::RenderWindow* window, sf::Time delta)
 
 void GameScreen::update(sf::RenderWindow* window, sf::Time delta)
 {
-    for(int i = 0; i < _arrows.size() ; i++)
+    if(!_data.gameover)
     {
-        _arrows[i].update(window,delta);
+        for(int i = 0; i < _arrows.size() ; i++)
+        {
+            _arrows[i].update(window,delta);
+        }
+        _data.board->update(window,delta);
     }
-    _data.board->update(window,delta);
+    else
+    {
+        if(_game->_mouse->_left.thisPressed)
+        {
+            newGame();
+        }
+    }
 }
 
 void GameScreen::launch(LaunchArrow* arrow)
@@ -95,6 +141,9 @@ void GameScreen::launch(LaunchArrow* arrow)
             if(fired)
             {
                 _data.nextHammer = false;
+                _data.hammerTurn+=0.5;
+                _data.nextHammerTurn = (int)_data.hammerTurn;
+                
             }
         }
     }
@@ -108,7 +157,8 @@ void GameScreen::launch(LaunchArrow* arrow)
             {
                 _data.nextBrick = new Brick(_game,_data.board);
                 _data.brickCount++;
-                if(_data.brickCount % 5 == 0)
+                _data.nextHammerTurn--;
+                if(_data.nextHammerTurn == 0)
                 {
                     _data.nextHammer = true;
                 }
@@ -129,8 +179,18 @@ void GameScreen::drawHud(sf::RenderWindow* window, sf::Time delta)
         _data.nextBrick->draw(window,delta,sf::Vector2f(400,120));
     }
     _scoreValue->setString(zf::toString(_data.score));
+    _hammerValue->setString(zf::toString(_data.nextHammerTurn));
     window->draw(*_score);
     window->draw(*_scoreValue);
+    window->draw(*_hammerIn);
+    window->draw(*_hammerValue); 
+    if(_data.gameover)
+    {
+        window->draw(_bg);
+        window->draw(*_gameoverText1);
+        window->draw(*_gameoverText2);
+        window->draw(*_gameoverText3);
+    }
 }
 
 

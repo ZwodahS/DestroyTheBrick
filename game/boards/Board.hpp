@@ -39,7 +39,7 @@ class Board
         void fadeHammer();
         void fadeBrick(Brick* brick,int score);
         void addDestroyedBricks(Brick* brick, std::vector<Brick*> &destroyedBricks);
-        
+        bool checkForGameOver();
         SimpleAnimator* _animator;
 };
 #endif

@@ -40,7 +40,7 @@ class GameScreen : public Screen
         virtual void update(sf::RenderWindow* window, sf::Time delta);
 
         void launch(LaunchArrow* arrow);        
-
+        void newGame();
     protected:
         GameData _data;
         std::vector<sf::Sprite> _floorGrid;
@@ -50,6 +50,14 @@ class GameScreen : public Screen
         sf::Sprite* _hammerSprite;
         sf::Text* _score;
         sf::Text* _scoreValue;
+
+        sf::Text* _gameoverText1;
+        sf::Text* _gameoverText2;
+        sf::Text* _gameoverText3;
+        sf::RectangleShape _bg;
+
+        sf::Text* _hammerIn;
+        sf::Text* _hammerValue;
 };
 
 #endif

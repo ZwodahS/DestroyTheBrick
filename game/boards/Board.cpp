@@ -61,6 +61,10 @@ bool Board::inShootableRange(int row, int col)
 
 void Board::update(sf::RenderWindow* window, sf::Time delta)
 {
+    if(_data->gameover)
+    {
+        return;
+    }
     if(_hammer == 0)
     {
         for(int i = 0 ; i < _bricks.size(); i++)
@@ -90,62 +94,69 @@ void Board::update(sf::RenderWindow* window, sf::Time delta)
                 _bricksActualPosition[newL.row][newL.col] = _bricks[i];
                 _bricks[i]->_currentLocation = _bricks[i]->_targetLocation;
             }
-            if(_knock == -1) // the first bricks
+            if(checkForGameOver())
             {
-                Brick* brick = _movingBricks.size() > 0 ? _movingBricks[0] : 0;
-                if(brick != 0)
-                {
-                    Grid knockGrid = brick->_currentLocation + _currentMovingDirection;
-                    Brick* knockBrick = getBrickAt(knockGrid);
-                    if(knockBrick == 0)
-                    {
-                        // do nothing
-                    }
-                    else
-                    {
-                        _knock = getKnockValue();
-                    }
-                }
-            }        
-            if(_knock > 0)
-            {
-                _knock--;
-                std::vector<Brick*> mBricks = std::vector<Brick*>(0);
-                for(int i = 0 ; i < _bricks.size() ; i++)
-                {
-                    _bricks[i]->tmp_moves = false;
-                }
-                for(int i = 0 ; i < _movingBricks.size() ; i++)
-                {
-                    mBricks.push_back(_movingBricks[i]);
-                    _movingBricks[i]->tmp_moves = true;
-                }
-                for(int i = 0 ; i < _movingBricks.size() ; i++) // for the old moving bricks, only knock those that are in the path
-                {
-                    Grid knockGrid = _movingBricks[i]->_currentLocation + _currentMovingDirection;
-                    Brick* knockBrick = getBrickAt(knockGrid);
-                    if(knockBrick == 0)
-                    {
-                    }
-                    else if(!(knockBrick->tmp_moves))
-                    {
-                        mBricks.push_back(knockBrick);
-                        knockBrick->tmp_moves = true;
-                    }
-                }
-                for(int i = _movingBricks.size() ; i < mBricks.size() ; i++)
-                {
-                    addMovingBricks(mBricks[i],mBricks,_currentMovingDirection);
-                }
-                for(int i = 0 ; i < mBricks.size() ; i++)
-                {
-                    mBricks[i]->moveBy(_currentMovingDirection.row, _currentMovingDirection.col);
-                }
+                // game over , don't move any more 
             }
-            else 
+            else
             {
-                _currentMovingDirection = Grid(0,0);
-                _movingBricks = std::vector<Brick*>(0);
+                if(_knock == -1) // the first bricks
+                {
+                    Brick* brick = _movingBricks.size() > 0 ? _movingBricks[0] : 0;
+                    if(brick != 0)
+                    {
+                        Grid knockGrid = brick->_currentLocation + _currentMovingDirection;
+                        Brick* knockBrick = getBrickAt(knockGrid);
+                        if(knockBrick == 0)
+                        {
+                            // do nothing
+                        }
+                        else
+                        {
+                            _knock = getKnockValue();
+                        }
+                    }
+                }        
+                if(_knock > 0)
+                {
+                    _knock--;
+                    std::vector<Brick*> mBricks = std::vector<Brick*>(0);
+                    for(int i = 0 ; i < _bricks.size() ; i++)
+                    {
+                        _bricks[i]->tmp_moves = false;
+                    }
+                    for(int i = 0 ; i < _movingBricks.size() ; i++)
+                    {
+                        mBricks.push_back(_movingBricks[i]);
+                        _movingBricks[i]->tmp_moves = true;
+                    }
+                    for(int i = 0 ; i < _movingBricks.size() ; i++) // for the old moving bricks, only knock those that are in the path
+                    {
+                        Grid knockGrid = _movingBricks[i]->_currentLocation + _currentMovingDirection;
+                        Brick* knockBrick = getBrickAt(knockGrid);
+                        if(knockBrick == 0)
+                        {
+                        }
+                        else if(!(knockBrick->tmp_moves))
+                        {
+                            mBricks.push_back(knockBrick);
+                            knockBrick->tmp_moves = true;
+                        }
+                    }
+                    for(int i = _movingBricks.size() ; i < mBricks.size() ; i++)
+                    {
+                        addMovingBricks(mBricks[i],mBricks,_currentMovingDirection);
+                    }
+                    for(int i = 0 ; i < mBricks.size() ; i++)
+                    {
+                        mBricks[i]->moveBy(_currentMovingDirection.row, _currentMovingDirection.col);
+                    }
+                }
+                else 
+                {
+                    _currentMovingDirection = Grid(0,0);
+                    _movingBricks = std::vector<Brick*>(0);
+                }
             }
         }
     }
@@ -471,4 +482,24 @@ void Board::fadeBrick(Brick* brick, int point)
     _animator->composite(t,_animator->composite()->move(sf::Vector2f(0,-30),1.0f)->fade(255,0,1.0f));    
     delete brick;
     _data->score+=point;
+}
+
+bool Board::checkForGameOver()
+{
+    for(int r = 0 ; r < _bricksActualPosition.size () ; r++)
+    {
+        if(_bricksActualPosition[r][0] != 0 || _bricksActualPosition[r][_bricksActualPosition[r].size()-1])
+        {
+            _data->gameover = true;
+        }
+    }
+
+    for(int c = 0 ; c < _bricksActualPosition[0].size() ; c++)
+    {
+        if(_bricksActualPosition[0][c] != 0 || _bricksActualPosition[_bricksActualPosition.size()-1][c] != 0)
+        {
+            _data->gameover = true;
+        }
+    }
+    return _data->gameover;
 }
