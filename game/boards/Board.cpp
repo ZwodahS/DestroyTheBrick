@@ -3,10 +3,13 @@
 #include "../consts.hpp"
 #include "Hammer.hpp"
 #include "Brick.hpp"
-
-Board::Board(Game* game)
+#include "../GameData.hpp"
+#include "../../z_framework/zf_common/f_conversion.hpp"
+#include <math.h>
+Board::Board(Game* game,GameData* data)
 {
     this->_game = game;
+    this->_data = data;
     this->_knock = -1;
     this->_currentMovingDirection = Grid(0,0);
     for(int r = 0 ; r < gameconsts::BOARD_SIZE ; r++)
@@ -171,7 +174,7 @@ void Board::update(sf::RenderWindow* window, sf::Time delta)
                 }
                 for(int i = 0 ; i < dBricks.size() ; i++)
                 {
-                    fadeBrick(dBricks[i]);
+                    fadeBrick(dBricks[i],pow(2,dBricks.size() - 1));
                 }
             }
             _currentMovingDirection = Grid(0,0);
@@ -446,7 +449,7 @@ void Board::fadeHammer()
     _hammer = 0 ;
 }
 
-void Board::fadeBrick(Brick* brick)
+void Board::fadeBrick(Brick* brick, int point)
 {
     _bricksActualPosition[brick->_currentLocation.row][brick->_currentLocation.col] = 0;
     std::vector<sf::Sprite> splits = brick->split4();
@@ -462,5 +465,10 @@ void Board::fadeBrick(Brick* brick)
             break;
         }
     }
+    sf::Text t = sf::Text("+" + zf::toString(point), _game->_assets.scoreFont, 16);
+    t.setColor(brick->getColor());
+    t.setPosition(brick->getCurrentPosition());
+    _animator->composite(t,_animator->composite()->move(sf::Vector2f(0,-30),1.0f)->fade(255,0,1.0f));    
     delete brick;
+    _data->score+=point;
 }

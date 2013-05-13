@@ -8,12 +8,14 @@ struct GameData
     Brick* nextBrick;
     bool nextHammer;
     int brickCount;
+    int score;
     GameData()
     {
         board = 0;
         nextBrick = 0;
         nextHammer = false;
         brickCount = 0;
+        score = 0;
     }
 };
 #endif

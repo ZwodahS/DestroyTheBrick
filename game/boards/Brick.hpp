@@ -30,7 +30,7 @@ class Brick : public BoardObject
         void setType(brick::BrickType type);
         void draw(sf::RenderWindow* window, sf::Time delta);
         void draw(sf::RenderWindow* window, sf::Time delta, sf::Vector2f position);
-
+        sf::Color getColor();
         std::vector<sf::Sprite> split4();
     private:
         brick::BrickType _type;

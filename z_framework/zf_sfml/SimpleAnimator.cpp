@@ -1,6 +1,7 @@
 #include "SimpleAnimator.hpp"
 #include "AnimationObject.hpp"
 #include "SpriteAnimationObject.hpp"
+#include "TextAnimationObject.hpp"
 SimpleAnimator::SimpleAnimator()
 {
 }
@@ -69,4 +70,11 @@ void SimpleAnimator::composite(sf::Sprite sprite, CompositeInstruction* instruct
     obj->setInstruction(instruction);
     objects.push_back(obj);
     
+}
+
+void SimpleAnimator::composite(sf::Text text, CompositeInstruction* instruction)
+{
+    TextAnimationObject* obj = new TextAnimationObject(text);
+    obj->setInstruction(instruction);
+    objects.push_back(obj);
 }

@@ -2,7 +2,7 @@
 #include <iostream>
 SpriteAnimationObject::SpriteAnimationObject(sf::Sprite sprite)
 {
-    this->sprite = sprite;
+    this->_sprite = sprite;
 }
 
 SpriteAnimationObject::~SpriteAnimationObject()
@@ -11,24 +11,24 @@ SpriteAnimationObject::~SpriteAnimationObject()
 
 void SpriteAnimationObject::setAlpha(float alpha)
 {
-    sf::Color color = this->sprite.getColor();
+    sf::Color color = this->_sprite.getColor();
     color.a = alpha;
-    this->sprite.setColor(color);
+    this->_sprite.setColor(color);
 }
 
 void SpriteAnimationObject::setPosition(sf::Vector2f position)
 {
-    this->sprite.setPosition(position);
+    this->_sprite.setPosition(position);
 }
 
 void SpriteAnimationObject::movePosition(sf::Vector2f moves)
 {
-    sf::Vector2f position = this->sprite.getPosition();
-    this->sprite.setPosition(position + moves);
+    sf::Vector2f position = this->_sprite.getPosition();
+    this->_sprite.setPosition(position + moves);
 }
 
 void SpriteAnimationObject::draw(sf::RenderWindow* window, sf::Time delta)
 {
-    window->draw(sprite);
+    window->draw(this->_sprite);
 }
 

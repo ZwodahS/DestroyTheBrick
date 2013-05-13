@@ -2,10 +2,13 @@
 #include "../consts.hpp"
 #include "../Game.hpp"
 #include "../g_boards.hpp"
+
+#include "../../z_framework/zf_common/f_conversion.hpp"
+
 GameScreen::GameScreen(Game* game)
     :Screen(game)
 {
-    _data.board = new Board(_game);
+    _data.board = new Board(_game,&_data);
 
     _data.board->putBrickInto(4,4,new Brick(_game,_data.board));
     _data.board->putBrickInto(4,5,new Brick(_game,_data.board));
@@ -35,13 +38,21 @@ GameScreen::GameScreen(Game* game)
         _arrows.push_back(LaunchArrow(_game,this,zf::South,0,col));
         _arrows.push_back(LaunchArrow(_game,this,zf::North,gameconsts::BOARD_SIZE - 1 , col));
     }
+        
+    _score = new sf::Text("Score : ", _game->_assets.scoreFont,10);
+    _score->setPosition(330, 20);
+    _score->setColor(sf::Color(255,255,255));
+    
+    _scoreValue = new sf::Text("00000",_game->_assets.scoreFont, 10);
+    _scoreValue->setPosition(400,20);
+    _scoreValue->setColor(sf::Color(255,255,255));
 
-    _next = new sf::Text("Next :",_game->_assets.scoreFont,12);
-    _next->setPosition(340,20);
+    _next = new sf::Text("Next :",_game->_assets.scoreFont,10);
+    _next->setPosition(330,120);
     _next->setColor(sf::Color(255,255,255));
 
     _hammerSprite = new sf::Sprite(_game->_assets.bricks.hammer.createSprite());
-    _hammerSprite->setPosition(420,20);
+    _hammerSprite->setPosition(400,120);
 
 }
 
@@ -115,8 +126,11 @@ void GameScreen::drawHud(sf::RenderWindow* window, sf::Time delta)
     }
     else
     {
-        _data.nextBrick->draw(window,delta,sf::Vector2f(420,20));
+        _data.nextBrick->draw(window,delta,sf::Vector2f(400,120));
     }
+    _scoreValue->setString(zf::toString(_data.score));
+    window->draw(*_score);
+    window->draw(*_scoreValue);
 }
 
 

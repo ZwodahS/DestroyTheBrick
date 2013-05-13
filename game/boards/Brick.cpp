@@ -85,3 +85,8 @@ std::vector<sf::Sprite> Brick::split4()
     std::vector<sf::Sprite> splits = zfsprites::split4(_brickSprite);
     return splits;
 }
+
+sf::Color Brick::getColor()
+{
+    return _brickSprite.getColor();
+}

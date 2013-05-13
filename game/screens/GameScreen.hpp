@@ -48,6 +48,8 @@ class GameScreen : public Screen
         
         sf::Text* _next;
         sf::Sprite* _hammerSprite;
+        sf::Text* _score;
+        sf::Text* _scoreValue;
 };
 
 #endif

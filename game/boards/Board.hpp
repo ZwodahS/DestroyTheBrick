@@ -1,6 +1,5 @@
 #ifndef _GAME_BOARDS_BOARD_H_
 #define _GAME_BOARDS_BOARD_H_
-
 #include "../../z_framework/zf_common/Grid.hpp"
 #include "../../z_framework/zf_common/Direction.hpp"
 #include "../../z_framework/zf_sfml/SimpleAnimator.hpp"
@@ -8,10 +7,11 @@
 class Game;
 class Brick;
 class Hammer;
+struct GameData;
 class Board
 {
     public:
-        Board(Game* game);
+        Board(Game* game,GameData* data);
         bool inRange(int row , int col);
         bool inShootableRange(int row, int col);
         Brick* getBrickAt(int row, int col);
@@ -29,6 +29,7 @@ class Board
         Hammer* _hammer;
         Grid _currentMovingDirection;
         Game* _game;
+        GameData* _data;
         int _knock;
         std::vector<Brick*> _bricks;
         std::vector<std::vector<Brick*> > _bricksActualPosition;
@@ -36,7 +37,7 @@ class Board
         int getKnockValue();
         void addMovingBricks(Brick* brick, std::vector<Brick*> &movingBricks,Grid moveDirection);
         void fadeHammer();
-        void fadeBrick(Brick* brick);
+        void fadeBrick(Brick* brick,int score);
         void addDestroyedBricks(Brick* brick, std::vector<Brick*> &destroyedBricks);
         
         SimpleAnimator* _animator;

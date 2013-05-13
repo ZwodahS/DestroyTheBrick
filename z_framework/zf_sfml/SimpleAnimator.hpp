@@ -24,6 +24,7 @@ class SimpleAnimator
         // sa.composite(sprite, sa.composite()->move(...)->fade(...));
         CompositeInstruction* composite(bool ordered = false); // use this to construct the instructionn for the method below.
         void composite(sf::Sprite sprite, CompositeInstruction* instruction);
+        void composite(sf::Text text, CompositeInstruction* instruction);
         
     private:
         std::vector<AnimationObject*> objects;
