@@ -6,6 +6,14 @@ struct GameData
 {
     Board* board;
     Brick* nextBrick;
-
+    bool nextHammer;
+    int brickCount;
+    GameData()
+    {
+        board = 0;
+        nextBrick = 0;
+        nextHammer = false;
+        brickCount = 0;
+    }
 };
 #endif

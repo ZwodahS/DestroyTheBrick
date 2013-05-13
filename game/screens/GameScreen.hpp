@@ -41,7 +41,6 @@ class GameScreen : public Screen
         void launch(LaunchArrow* arrow);        
     protected:
         GameData _data;
-
         std::vector<sf::Sprite> _floorGrid;
         std::vector<LaunchArrow> _arrows;
         

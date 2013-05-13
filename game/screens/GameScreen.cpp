@@ -35,12 +35,6 @@ GameScreen::GameScreen(Game* game)
         _arrows.push_back(LaunchArrow(_game,this,zf::South,0,col));
         _arrows.push_back(LaunchArrow(_game,this,zf::North,gameconsts::BOARD_SIZE - 1 , col));
     }
-    sf::Sprite sprite = _game->_assets.bricks.brick.createSprite();
-    sprite.setPosition(100,100);
-    sprite.setColor(sf::Color(255,255,255,255));
-    
-    _game->_animator->composite(sprite,(_game->_animator->composite()->move(sprite.getPosition(),sf::Vector2f(200,0),3.0f)->fade(sprite.getColor().a,0,5.0f)));
-    _game->_animator->composite(sprite,(_game->_animator->composite(true)->move(sprite.getPosition(),sf::Vector2f(200,200),3.0f)->fade(sprite.getColor().a,0,5.0f)));
 }
 
 void GameScreen::draw(sf::RenderWindow* window, sf::Time delta)
@@ -63,22 +57,40 @@ void GameScreen::update(sf::RenderWindow* window, sf::Time delta)
         _arrows[i].update(window,delta);
     }
     _data.board->update(window,delta);
-    
 }
 
 void GameScreen::launch(LaunchArrow* arrow)
 {
-    if(!_data.board->isMoving())
+    if(_data.nextHammer)
     {
-        Grid arrowLocation = arrow->_location;
-        bool fired = _data.board->fire(arrowLocation, _data.nextBrick,arrow->_direction);
-        if(fired)
+        if(!_data.board->isMoving())
         {
-            _data.nextBrick = new Brick(_game,_data.board);
+            Grid arrowLocation = arrow->_location;
+            bool fired = _data.board->fireHammer(arrowLocation, arrow->_direction);
+            if(fired)
+            {
+                _data.nextHammer = false;
+            }
+        }
+    }
+    else
+    {
+        if(!_data.board->isMoving())
+        {
+            Grid arrowLocation = arrow->_location;
+            bool fired = _data.board->fireBrick(arrowLocation, _data.nextBrick,arrow->_direction);
+            if(fired)
+            {
+                _data.nextBrick = new Brick(_game,_data.board);
+                _data.brickCount++;
+                if(_data.brickCount % 5 == 0)
+                {
+                    _data.nextHammer = true;
+                }
+            }
         }
     }
 }
-
 LaunchArrow::LaunchArrow()
 {
     this->_game = 0;

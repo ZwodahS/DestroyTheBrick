@@ -8,6 +8,7 @@ struct BrickAssets
     SpriteSheet spriteSheet;
     TextureRegion brick;
     TextureRegion grid;
+    TextureRegion hammer;
 };
 
 struct ArrowAssets
