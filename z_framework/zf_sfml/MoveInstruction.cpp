@@ -1,18 +1,19 @@
 #include "MoveInstruction.hpp"
 #include "AnimationObject.hpp"
-MoveInstruction::MoveInstruction(sf::Vector2f source, sf::Vector2f target, float delta)
+MoveInstruction::MoveInstruction(sf::Vector2f moveVector, float moveSecs)
 {
     this->_done = false;
-    this->_position = source;
-    this->_target = target;
-    this->_move = (_target - _position) / delta;
+    this->_moveVector = moveVector;
+    this->_timeMax = moveSecs;
+    this->_timeCurrent = 0;
 }
+
 MoveInstruction::MoveInstruction(const MoveInstruction &mi)
 {
-    this->_done = mi._done;
-    this->_position = mi._position;
-    this->_move = mi._move;
-    this->_target = mi._target;
+    this->_done = false;
+    this->_moveVector = mi._moveVector;
+    this->_timeMax = mi._timeMax;
+    this->_timeCurrent = 0;
 }
 
 MoveInstruction::~MoveInstruction()
@@ -23,12 +24,14 @@ bool MoveInstruction::update(sf::RenderWindow* window, sf::Time delta, Animation
 {
     if(!_done)
     {
-        this->_position += _move * delta.asSeconds();
-        if(overShootDestination())
+        float moveTime = delta.asSeconds();
+        _timeCurrent += moveTime;
+        if(_timeCurrent > _timeMax)
         {
+            moveTime -= (_timeCurrent - _timeMax);
             _done = true;
         }
-        object->setPosition(_position);
+        object->movePosition(moveTime * _moveVector);
     }
     return _done;
 }
@@ -36,53 +39,4 @@ bool MoveInstruction::update(sf::RenderWindow* window, sf::Time delta, Animation
 bool MoveInstruction::isDone(AnimationObject* object)
 {
     return _done;
-}
-
-bool MoveInstruction::overShootDestination()
-{
-    bool x_done = false;
-    bool y_done = false;
-    if(_move.x > 0)
-    {
-        if(_position.x > _target.x)
-        {
-            x_done = true;
-            _position.x = _target.x;
-        }
-    }
-    else if(_move.x < 0)
-    {
-        if(_position.x < _target.x)
-        {
-            x_done = true;
-            _position.x = _target.x;
-        }
-    }
-    else
-    {
-        x_done =true;
-    }
-
-
-    if(_move.y > 0)
-    {
-        if(_position.y > _target.y)
-        {
-            y_done = true;
-            _position.y = _target.y;
-        }
-    }
-    else if(_move.y < 0)
-    {
-        if(_position.y < _target.y)
-        {
-            y_done = true;
-            _position.y = _target.y;
-        }
-    }
-    else
-    {
-        x_done =true;
-    }
-    return x_done && y_done;
 }

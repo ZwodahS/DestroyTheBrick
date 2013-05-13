@@ -9,7 +9,7 @@
 
 Game::Game()
 {
-    _width = 320;
+    _width = 480;
     _height = 320;
     _title = "Destroy the Brick";
     loadAssets();

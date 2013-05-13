@@ -4,7 +4,7 @@
 #include "BoardObject.hpp"
 #include "../../z_framework/zf_common/Grid.hpp"
 #include <SFML/Graphics.hpp>
-
+#include <vector>
 namespace brick
 {
     enum BrickType
@@ -29,7 +29,9 @@ class Brick : public BoardObject
         brick::BrickType getType();
         void setType(brick::BrickType type);
         void draw(sf::RenderWindow* window, sf::Time delta);
+        void draw(sf::RenderWindow* window, sf::Time delta, sf::Vector2f position);
 
+        std::vector<sf::Sprite> split4();
     private:
         brick::BrickType _type;
         sf::Sprite _brickSprite;

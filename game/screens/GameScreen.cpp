@@ -35,8 +35,21 @@ GameScreen::GameScreen(Game* game)
         _arrows.push_back(LaunchArrow(_game,this,zf::South,0,col));
         _arrows.push_back(LaunchArrow(_game,this,zf::North,gameconsts::BOARD_SIZE - 1 , col));
     }
+
+    _next = new sf::Text("Next :",_game->_assets.scoreFont,12);
+    _next->setPosition(340,20);
+    _next->setColor(sf::Color(255,255,255));
+
+    _hammerSprite = new sf::Sprite(_game->_assets.bricks.hammer.createSprite());
+    _hammerSprite->setPosition(420,20);
+
 }
 
+GameScreen::~GameScreen()
+{
+    delete _next;
+    delete _hammerSprite;
+}
 void GameScreen::draw(sf::RenderWindow* window, sf::Time delta)
 {
     for(int i = 0 ; i < _arrows.size() ; i++)
@@ -48,6 +61,7 @@ void GameScreen::draw(sf::RenderWindow* window, sf::Time delta)
         window->draw(_floorGrid[i]);
     }
     _data.board->draw(window,delta);
+    drawHud(window,delta);
 }
 
 void GameScreen::update(sf::RenderWindow* window, sf::Time delta)
@@ -91,6 +105,22 @@ void GameScreen::launch(LaunchArrow* arrow)
         }
     }
 }
+
+void GameScreen::drawHud(sf::RenderWindow* window, sf::Time delta)
+{
+    window->draw(*_next);
+    if(_data.nextHammer)
+    {
+        window->draw(*_hammerSprite);
+    }
+    else
+    {
+        _data.nextBrick->draw(window,delta,sf::Vector2f(420,20));
+    }
+}
+
+
+
 LaunchArrow::LaunchArrow()
 {
     this->_game = 0;
@@ -153,4 +183,5 @@ void LaunchArrow::setDirection(zf::Direction direction)
     }
     _arrowSprite.setPosition(_location.col * gameconsts::BRICK_SIZE , _location.row * gameconsts::BRICK_SIZE);
 }
+
 

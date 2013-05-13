@@ -2,7 +2,7 @@
 #include "Board.hpp"
 #include "../consts.hpp"
 #include "../Game.hpp"
-
+#include "../../z_framework/zf_sfml/f_sprites.hpp"
 
 
 Brick::Brick(Game* game,Board* board)
@@ -46,6 +46,12 @@ void Brick::draw(sf::RenderWindow* window, sf::Time delta)
     window->draw(_brickSprite);
 }
 
+void Brick::draw(sf::RenderWindow* window, sf::Time delta, sf::Vector2f position)
+{
+    _brickSprite.setPosition(position);
+    window->draw(_brickSprite);
+}
+
 brick::BrickType Brick::getType()
 {
     return _type;
@@ -74,3 +80,8 @@ void Brick::setType(brick::BrickType type)
     }
 }
 
+std::vector<sf::Sprite> Brick::split4()
+{
+    std::vector<sf::Sprite> splits = zfsprites::split4(_brickSprite);
+    return splits;
+}

@@ -3,6 +3,7 @@
 
 #include "../../z_framework/zf_common/Grid.hpp"
 #include "../../z_framework/zf_common/Direction.hpp"
+#include "../../z_framework/zf_sfml/SimpleAnimator.hpp"
 #include <SFML/Graphics.hpp>
 class Game;
 class Brick;
@@ -37,6 +38,7 @@ class Board
         void fadeHammer();
         void fadeBrick(Brick* brick);
         void addDestroyedBricks(Brick* brick, std::vector<Brick*> &destroyedBricks);
-
+        
+        SimpleAnimator* _animator;
 };
 #endif

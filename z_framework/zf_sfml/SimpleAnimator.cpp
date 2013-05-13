@@ -41,13 +41,22 @@ void SimpleAnimator::fade(sf::Sprite sprite, int targetAlpha, float time)
     objects.push_back(obj);
 }
 
-void SimpleAnimator::move(sf::Sprite sprite, sf::Vector2f target , float time)
+void SimpleAnimator::moveTo(sf::Sprite sprite, sf::Vector2f target , float time)
 {
     SpriteAnimationObject* obj = new SpriteAnimationObject(sprite);
-    MoveInstruction* mi = new MoveInstruction(sprite.getPosition(),target,time);
+    MoveToInstruction* mi = new MoveToInstruction(sprite.getPosition(),target,time);
     obj->setInstruction(mi);
     objects.push_back(obj);
 }
+
+void SimpleAnimator::move(sf::Sprite sprite, sf::Vector2f moveVec, float duration)
+{
+    SpriteAnimationObject* obj = new SpriteAnimationObject(sprite);
+    MoveInstruction* mi = new MoveInstruction(moveVec, duration);
+    obj->setInstruction(mi);
+    objects.push_back(obj);
+}
+
 
 CompositeInstruction* SimpleAnimator::composite(bool ordered)
 {

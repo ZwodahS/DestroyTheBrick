@@ -20,7 +20,15 @@ void SpriteAnimationObject::setPosition(sf::Vector2f position)
 {
     this->sprite.setPosition(position);
 }
+
+void SpriteAnimationObject::movePosition(sf::Vector2f moves)
+{
+    sf::Vector2f position = this->sprite.getPosition();
+    this->sprite.setPosition(position + moves);
+}
+
 void SpriteAnimationObject::draw(sf::RenderWindow* window, sf::Time delta)
 {
     window->draw(sprite);
 }
+

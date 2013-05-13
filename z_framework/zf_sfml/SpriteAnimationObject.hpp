@@ -12,6 +12,7 @@ class SpriteAnimationObject : public AnimationObject
         sf::Sprite sprite;
         void setAlpha(float alpha);
         void setPosition(sf::Vector2f position);
+        void movePosition(sf::Vector2f position);
         void draw(sf::RenderWindow* window, sf::Time delta);
 
 };

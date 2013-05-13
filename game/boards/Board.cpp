@@ -19,6 +19,7 @@ Board::Board(Game* game)
     }
     this->_movingBricks = std::vector<Brick*>(0);
     this->_hammer = 0;
+    this->_animator = new SimpleAnimator();
 }
 
 Brick* Board::getBrickAt(int row, int col)
@@ -178,6 +179,7 @@ void Board::update(sf::RenderWindow* window, sf::Time delta)
         }
 
     }
+    _animator->update(window,delta);
 }
 void Board::addDestroyedBricks(Brick* brick, std::vector<Brick*> &destroyedBricks)
 {
@@ -299,6 +301,7 @@ void Board::draw(sf::RenderWindow* window, sf::Time delta)
     {
         _hammer->draw(window,delta);
     }
+    _animator->draw(window,delta);
 }
 
 bool Board::putHammerInto(int row, int col, Hammer* hammer)
@@ -446,6 +449,11 @@ void Board::fadeHammer()
 void Board::fadeBrick(Brick* brick)
 {
     _bricksActualPosition[brick->_currentLocation.row][brick->_currentLocation.col] = 0;
+    std::vector<sf::Sprite> splits = brick->split4();
+    _animator->composite ( splits[0] , _animator->composite (  ) ->move ( sf::Vector2f ( -200+(rand() % 200) , -200+(rand() % 200) )  , 2.0f ) ->fade ( 255 , 0 , 2.0f )  ) ;
+    _animator->composite ( splits[1] , _animator->composite (  ) ->move ( sf::Vector2f ( 200+(rand() % 200)  , -200+(rand() % 200) )  , 2.0f ) ->fade ( 255 , 0 , 2.0f )  ) ;
+    _animator->composite ( splits[2] , _animator->composite (  ) ->move ( sf::Vector2f ( -200+(rand() % 200) , 200 +(rand() % 200) )  , 2.0f ) ->fade ( 255 , 0 , 2.0f )  ) ;
+    _animator->composite ( splits[3] , _animator->composite (  ) ->move ( sf::Vector2f ( 200+(rand() % 200)  , 200 +(rand() % 200) )  , 2.0f ) ->fade ( 255 , 0 , 2.0f )  ) ;
     for(int i = 0 ; i < _bricks.size() ; i++)
     {
         if(_bricks[i] == brick)

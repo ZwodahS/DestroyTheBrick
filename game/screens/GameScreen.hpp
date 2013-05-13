@@ -36,14 +36,18 @@ class GameScreen : public Screen
         ~GameScreen();
     
         virtual void draw(sf::RenderWindow* window, sf::Time delta);
+        void drawHud(sf::RenderWindow* window, sf::Time delta);
         virtual void update(sf::RenderWindow* window, sf::Time delta);
 
         void launch(LaunchArrow* arrow);        
+
     protected:
         GameData _data;
         std::vector<sf::Sprite> _floorGrid;
         std::vector<LaunchArrow> _arrows;
         
+        sf::Text* _next;
+        sf::Sprite* _hammerSprite;
 };
 
 #endif

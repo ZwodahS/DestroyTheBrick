@@ -28,9 +28,9 @@ CompositeInstruction* CompositeInstruction::addInstruction(FadeInstruction fi)
     return this;
 }
 
-CompositeInstruction* CompositeInstruction::addInstruction(MoveInstruction mi)
+CompositeInstruction* CompositeInstruction::addInstruction(MoveToInstruction mi)
 {
-    MoveInstruction* m = new MoveInstruction(mi);
+    MoveToInstruction* m = new MoveToInstruction(mi);
     this->_instructions.push_back(m);
     return this;
 }
@@ -81,9 +81,16 @@ CompositeInstruction* CompositeInstruction::fade(int startingAlpha, int endingAl
     return this;
 }
 
-CompositeInstruction* CompositeInstruction::move(sf::Vector2f source, sf::Vector2f target, float delta)
+CompositeInstruction* CompositeInstruction::moveTo(sf::Vector2f source, sf::Vector2f target, float delta)
 {
-    MoveInstruction* mi = new MoveInstruction(source,target,delta);
+    MoveToInstruction* mi = new MoveToInstruction(source,target,delta);
+    this->_instructions.push_back(mi);
+    return this;
+}
+
+CompositeInstruction* CompositeInstruction::move(sf::Vector2f moveVec, float duration)
+{
+    MoveInstruction* mi = new MoveInstruction(moveVec,duration);
     this->_instructions.push_back(mi);
     return this;
 }
