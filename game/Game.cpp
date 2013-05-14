@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 
-#define CLEAR_COLOR sf::Color(20,20,20,255)
+#define CLEAR_COLOR sf::Color(200,200,255,255)
 
 
 Game::Game()

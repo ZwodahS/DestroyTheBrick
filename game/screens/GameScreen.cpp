@@ -5,6 +5,8 @@
 
 #include "../../z_framework/zf_common/f_conversion.hpp"
 
+#define WORD_COLOR sf::Color(0,0,0,255)
+#define ARROW_COLOR sf::Color(0,100,0,255)
 GameScreen::GameScreen(Game* game)
     :Screen(game)
 {
@@ -35,35 +37,35 @@ GameScreen::GameScreen(Game* game)
         
     _score = new sf::Text("Score : ", _game->_assets.scoreFont,10);
     _score->setPosition(330, 20);
-    _score->setColor(sf::Color(255,255,255));
+    _score->setColor(WORD_COLOR);
     
     _scoreValue = new sf::Text("00000",_game->_assets.scoreFont, 10);
     _scoreValue->setPosition(400,20);
-    _scoreValue->setColor(sf::Color(255,255,255));
+    _scoreValue->setColor(WORD_COLOR);
 
     _hammerIn = new sf::Text("Hammer:", _game->_assets.scoreFont,10);
     _hammerIn->setPosition(330,80);
-    _hammerIn->setColor(sf::Color(255,255,255));
+    _hammerIn->setColor(WORD_COLOR);
    
     _hammerValue = new sf::Text(zf::toString(_data.nextHammerTurn),_game->_assets.scoreFont, 10);
     _hammerValue->setPosition(420,80);
-    _hammerValue->setColor(sf::Color(255,255,255));
+    _hammerValue->setColor(WORD_COLOR);
 
     _next = new sf::Text("Next :",_game->_assets.scoreFont,10);
     _next->setPosition(330,120);
-    _next->setColor(sf::Color(255,255,255));
+    _next->setColor(WORD_COLOR);
 
     _hammerSprite = new sf::Sprite(_game->_assets.bricks.hammer.createSprite());
     _hammerSprite->setPosition(400,120);
 
     _gameoverText1 = new sf::Text("Game over", _game->_assets.scoreFont,36);
-    _gameoverText1->setColor(sf::Color(255,255,255));
+    _gameoverText1->setColor(WORD_COLOR);
     _gameoverText1->setPosition(50,50);
     _gameoverText2 = new sf::Text("Score : 0", _game->_assets.scoreFont,24);
     _gameoverText2->setPosition(150,100);
-    _gameoverText2->setColor(sf::Color(255,255,255));
+    _gameoverText2->setColor(WORD_COLOR);
     _gameoverText3 = new sf::Text("Click for new game",_game->_assets.scoreFont,12);
-    _gameoverText3->setColor(sf::Color(255,255,255));
+    _gameoverText3->setColor(WORD_COLOR);
     _gameoverText3->setPosition(125,150);
 
     _bg = sf::RectangleShape(sf::Vector2f(_game->_width,_game->_height));
@@ -188,6 +190,7 @@ void GameScreen::drawHud(sf::RenderWindow* window, sf::Time delta)
     {
         window->draw(_bg);
         window->draw(*_gameoverText1);
+        _gameoverText2->setString("Score :"+zf::toString(_data.score));
         window->draw(*_gameoverText2);
         window->draw(*_gameoverText3);
     }
@@ -219,7 +222,7 @@ void LaunchArrow::draw(sf::RenderWindow* window, sf::Time delta)
     }
     else
     {
-        _arrowSprite.setColor(sf::Color(255,255,255));
+        _arrowSprite.setColor(ARROW_COLOR);
     }
     window->draw(_arrowSprite);
 }

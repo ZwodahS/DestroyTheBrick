@@ -9,7 +9,7 @@ void Game::loadAssets()
     sf::Image group;
     sf::Image image;
 
-    group.create(64,64,sf::Color::Black);
+    group.create(64,64,sf::Color(0,0,0,0));
     image.loadFromFile("assets/img/brick.png");
     group.copy(image,0,0,sf::IntRect(0,0,0,0),true);
     image.loadFromFile("assets/img/grid.png");
@@ -25,7 +25,7 @@ void Game::loadAssets()
     _assets.bricks.hammer = TextureRegion(region.texture,sf::IntRect(srcClip.left, srcClip.top+32,32,32));
 
 
-    group.create(64,64,sf::Color::Black);
+    group.create(64,64,sf::Color(0,0,0,0));
     image.loadFromFile("assets/img/arrows/up.png");
     group.copy(image,0,0,sf::IntRect(0,0,0,0),true);
     image.loadFromFile("assets/img/arrows/down.png");
